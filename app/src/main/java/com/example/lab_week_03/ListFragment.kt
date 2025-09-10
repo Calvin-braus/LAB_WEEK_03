@@ -27,18 +27,21 @@ class ListFragment : Fragment() {
         val coffeeList = listOf<View>(
             view.findViewById(R.id.affogato),
             view.findViewById(R.id.americano),
-            view.findViewById(R.id.latte)
+            view.findViewById(R.id.latte),
+            view.findViewById(R.id.espresso),   // item baru
+            view.findViewById(R.id.cappuccino) // item baru
         )
 
         coffeeList.forEach { coffee ->
-            val fragmentBundle = Bundle()
-            fragmentBundle.putInt(COFFEE_ID, coffee.id)
-
+            val bundle = Bundle().apply {
+                putInt(COFFEE_ID, coffee.id)
+            }
             coffee.setOnClickListener {
-                it.findNavController().navigate(R.id.coffee_id_action, fragmentBundle)
+                it.findNavController().navigate(R.id.coffee_id_action, bundle)
             }
         }
     }
+
 
     companion object {
         const val COFFEE_ID = "COFFEE_ID"

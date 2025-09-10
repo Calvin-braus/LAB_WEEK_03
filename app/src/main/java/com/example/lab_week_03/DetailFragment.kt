@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 
 class DetailFragment : Fragment() {
 
@@ -15,28 +17,26 @@ class DetailFragment : Fragment() {
     private val coffeeDesc: TextView?
         get() = view?.findViewById(R.id.coffee_desc)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // inflate layout fragment_detail.xml
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Ambil coffeeId dari arguments (default 0)
-        val coffeeId = arguments?.getInt(COFFEE_ID, 0) ?: 0
+        val coffeeId = arguments?.getInt(COFFEE_ID) ?: 0
         setCoffeeData(coffeeId)
+
+        // Tombol Back
+        view.findViewById<Button>(R.id.button_back)?.setOnClickListener {
+            it.findNavController().navigateUp()
+        }
     }
 
-    // fungsi untuk update UI sesuai kopi yang dipilih
-    fun setCoffeeData(id: Int) {
+    private fun setCoffeeData(id: Int) {
         when (id) {
             R.id.affogato -> {
                 coffeeTitle?.text = getString(R.string.affogato_title)
@@ -50,18 +50,22 @@ class DetailFragment : Fragment() {
                 coffeeTitle?.text = getString(R.string.latte_title)
                 coffeeDesc?.text = getString(R.string.latte_desc)
             }
-        }
-    }
-
-    companion object {
-        private const val COFFEE_ID = "COFFEE_ID"
-
-        // Factory method untuk membuat DetailFragment dengan coffeeId
-        fun newInstance(coffeeId: Int) = DetailFragment().apply {
-            arguments = Bundle().apply {
-                putInt(COFFEE_ID, coffeeId)
+            R.id.espresso -> {
+                coffeeTitle?.text = getString(R.string.espresso_title)
+                coffeeDesc?.text = getString(R.string.espresso_desc)
+            }
+            R.id.cappuccino -> {
+                coffeeTitle?.text = getString(R.string.cappuccino_title)
+                coffeeDesc?.text = getString(R.string.cappuccino_desc)
             }
         }
     }
 
+    companion object {
+        const val COFFEE_ID = "COFFEE_ID"
+
+        fun newInstance(coffeeId: Int) = DetailFragment().apply {
+            arguments = Bundle().apply { putInt(COFFEE_ID, coffeeId) }
+        }
+    }
 }
