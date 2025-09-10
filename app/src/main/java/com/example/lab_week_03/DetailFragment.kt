@@ -27,6 +27,14 @@ class DetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Ambil coffeeId dari arguments (default 0)
+        val coffeeId = arguments?.getInt(COFFEE_ID, 0) ?: 0
+        setCoffeeData(coffeeId)
+    }
+
     // fungsi untuk update UI sesuai kopi yang dipilih
     fun setCoffeeData(id: Int) {
         when (id) {
@@ -46,7 +54,14 @@ class DetailFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
-        fun newInstance() = DetailFragment()
+        private const val COFFEE_ID = "COFFEE_ID"
+
+        // Factory method untuk membuat DetailFragment dengan coffeeId
+        fun newInstance(coffeeId: Int) = DetailFragment().apply {
+            arguments = Bundle().apply {
+                putInt(COFFEE_ID, coffeeId)
+            }
+        }
     }
+
 }
